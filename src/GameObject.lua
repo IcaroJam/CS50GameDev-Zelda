@@ -1,36 +1,36 @@
 --[[
-    GD50
-    Legend of Zelda
+	GD50
+	Legend of Zelda
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+	Author: Colton Ogden
+	cogden@cs50.harvard.edu
 ]]
 
 GameObject = Class{}
 
 function GameObject:init(def, x, y)
-    
-    -- string identifying this object type
-    self.type = def.type
 
-    self.texture = def.texture
-    self.frame = def.frame or 1
+	-- string identifying this object type
+	self.type = def.type
 
-    -- whether it acts as an obstacle or not
-    self.solid = def.solid
+	self.texture = def.texture
+	self.frame = def.frame or 1
 
-    self.defaultState = def.defaultState
-    self.state = self.defaultState
-    self.states = def.states
+	-- whether it acts as an obstacle or not
+	self.solid = def.solid
 
-    -- dimensions
-    self.x = x
-    self.y = y
-    self.width = def.width
-    self.height = def.height
+	self.defaultState = def.defaultState
+	self.state = self.defaultState
+	self.states = def.states
 
-    -- default empty collision callback
-    self.onCollide = function() end
+	-- dimensions
+	self.x = x
+	self.y = y
+	self.width = def.width
+	self.height = def.height
+
+	-- default empty collision callback
+	self.onCollide = def.onCollide and def.onCollide or function() end
 end
 
 function GameObject:update(dt)
@@ -38,6 +38,6 @@ function GameObject:update(dt)
 end
 
 function GameObject:render(adjacentOffsetX, adjacentOffsetY)
-    love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.states[self.state].frame or self.frame],
-        self.x + adjacentOffsetX, self.y + adjacentOffsetY)
+	love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.states[self.state].frame or self.frame],
+		self.x + adjacentOffsetX, self.y + adjacentOffsetY)
 end
