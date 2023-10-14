@@ -44,6 +44,7 @@ GAME_OBJECT_DEFS = {
 			-- For some fucking reason a cannot for the love of god understand, when this function is called in Room.lua line 195 as 'object:onCollide(self.player, object)', the values are flipped and so player is assigned to the obj variable. WHY
 			obj:heal(2)
 			plyr.consumed = true
+			gSounds["heart-pickup"]:play()
 		end
 	}
 }

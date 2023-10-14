@@ -31,6 +31,8 @@ function love.load()
     gSounds['music']:setLooping(true)
     gSounds['music']:play()
 
+	gSounds["heart-pickup"]:setVolume(2.5)
+
     love.keyboard.keysPressed = {}
 end
 
