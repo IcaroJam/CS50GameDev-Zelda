@@ -34,6 +34,7 @@ function love.load()
 	gSounds["heart-pickup"]:setVolume(2.5)
 
     love.keyboard.keysPressed = {}
+	print(MAP_WIDTH, MAP_HEIGHT)
 end
 
 function love.resize(w, h)

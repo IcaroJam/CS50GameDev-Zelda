@@ -114,6 +114,24 @@ function Room:generateObjects()
 
 	-- add to list of objects in scene (only one switch for now)
 	table.insert(self.objects, switch)
+
+	-- create a maximum of 10 pots in the level:
+	local maxPots = 10
+	for j = 1, MAP_HEIGHT - 1 do
+		for i = 1, MAP_WIDTH - 1 do
+			if maxPots > 0 and math.random(50) == 1 then
+				maxPots = maxPots - 1
+				local currPot = GameObject(
+					GAME_OBJECT_DEFS["pot"],
+					MAP_RENDER_OFFSET_X + i * TILE_SIZE,
+					MAP_RENDER_OFFSET_Y + j * TILE_SIZE
+				)
+				-- randomize the texture
+				currPot.frame = currPot.states[math.random(#currPot.states)]
+				table.insert(self.objects, currPot)
+			end
+		end
+	end
 end
 
 --[[
