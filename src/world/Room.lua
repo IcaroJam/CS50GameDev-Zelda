@@ -117,8 +117,8 @@ function Room:generateObjects()
 
 	-- create a maximum of 10 pots in the level:
 	local maxPots = 10
-	for j = 1, MAP_HEIGHT - 1 do
-		for i = 1, MAP_WIDTH - 1 do
+	for j = 1, MAP_HEIGHT - 2 do
+		for i = 1, MAP_WIDTH - 2 do
 			if maxPots > 0 and math.random(50) == 1 then
 				maxPots = maxPots - 1
 				local currPot = GameObject(
