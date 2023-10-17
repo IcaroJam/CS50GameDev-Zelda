@@ -41,7 +41,7 @@ function PlayerLiftState:update(dt)
 	-- is the lifting animation has finished playing and there's a pot in front of us move to the carry state, else go back to idle
 	if self.player.currentAnimation.timesPlayed > 0 then
 		if self.liftedObj then
-			self.player:changeState("carry")
+			self.player:changeState("carry", self.liftedObj)
 		else
 			self.player:changeState("idle")
 		end

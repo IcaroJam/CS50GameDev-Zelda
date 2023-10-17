@@ -90,21 +90,41 @@ ENTITY_DEFS = {
                 interval = 0.4,
                 texture = 'character-lift'
             },
+            ['carry-idle-left'] = {
+                frames = {13},
+                texture = 'character-carry'
+            },
+            ['carry-idle-right'] = {
+                frames = {5},
+                texture = 'character-carry'
+            },
+            ['carry-idle-down'] = {
+                frames = {1},
+                texture = 'character-carry'
+            },
+            ['carry-idle-up'] = {
+                frames = {9},
+                texture = 'character-carry'
+            },
             ['carry-left'] = {
                 frames = {13, 14, 15, 16},
+                interval = 0.15,
                 texture = 'character-carry'
             },
             ['carry-right'] = {
                 frames = {5, 6, 7, 8},
+                interval = 0.15,
                 texture = 'character-carry'
             },
             ['carry-down'] = {
                 frames = {1, 2, 3, 4},
+                interval = 0.15,
                 texture = 'character-carry'
             },
             ['carry-up'] = {
                 frames = {9, 10, 11, 12},
-                texture = 'chacacter-carry'
+                interval = 0.15,
+                texture = 'character-carry'
             },
         }
     },
