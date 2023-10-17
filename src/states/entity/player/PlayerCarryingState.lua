@@ -11,8 +11,10 @@ function PlayerCarryingState:init(player, dungeon)
 	self.entity:changeAnimation("carry-" .. self.entity.direction)
 end
 
-function PlayerCarryingState:enter(liftedObj)
-	self.liftedObj = liftedObj
+function PlayerCarryingState:enter(params)
+	if params then
+		self.liftedObj = params.obj
+	end
 end
 
 function PlayerCarryingState:update(dt)
@@ -29,7 +31,9 @@ function PlayerCarryingState:update(dt)
 		self.entity.direction = 'down'
 		self.entity:changeAnimation('carry-down')
 	else
-		self.entity:changeState("carry-idle")
+		self.entity.stateMachine:change("carry-idle", {
+			obj = self.liftedObj
+		})
 	end
 
 	if love.keyboard.wasPressed('space') then
@@ -39,76 +43,14 @@ function PlayerCarryingState:update(dt)
 	-- perform base collision detection against walls
 	EntityWalkState.update(self, dt)
 
-	-- if we bumped something when checking collision, check any object collisions
-	if self.bumped then
-		if self.entity.direction == 'left' then
+	-- update the lifted obj position
+	self.liftedObj.x = self.entity.x
+	self.liftedObj.y = self.entity.y - 8
+end
 
-			-- temporarily adjust position into the wall, since bumping pushes outward
-			self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
-
-			-- check for colliding into doorway to transition
-			for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
-				if self.entity:collides(doorway) and doorway.open then
-
-					-- shift entity to center of door to avoid phasing through wall
-					self.entity.y = doorway.y + 4
-					Event.dispatch('shift-left')
-				end
-			end
-
-			-- readjust
-			self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
-		elseif self.entity.direction == 'right' then
-
-			-- temporarily adjust position
-			self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
-
-			-- check for colliding into doorway to transition
-			for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
-				if self.entity:collides(doorway) and doorway.open then
-
-					-- shift entity to center of door to avoid phasing through wall
-					self.entity.y = doorway.y + 4
-					Event.dispatch('shift-right')
-				end
-			end
-
-			-- readjust
-			self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
-		elseif self.entity.direction == 'up' then
-
-			-- temporarily adjust position
-			self.entity.y = self.entity.y - PLAYER_WALK_SPEED * dt
-
-			-- check for colliding into doorway to transition
-			for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
-				if self.entity:collides(doorway) and doorway.open then
-
-					-- shift entity to center of door to avoid phasing through wall
-					self.entity.x = doorway.x + 8
-					Event.dispatch('shift-up')
-				end
-			end
-
-			-- readjust
-			self.entity.y = self.entity.y + PLAYER_WALK_SPEED * dt
-		else
-
-			-- temporarily adjust position
-			self.entity.y = self.entity.y + PLAYER_WALK_SPEED * dt
-
-			-- check for colliding into doorway to transition
-			for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
-				if self.entity:collides(doorway) and doorway.open then
-
-					-- shift entity to center of door to avoid phasing through wall
-					self.entity.x = doorway.x + 8
-					Event.dispatch('shift-down')
-				end
-			end
-
-			-- readjust
-			self.entity.y = self.entity.y - PLAYER_WALK_SPEED * dt
-		end
-	end
+function PlayerCarryingState:render()
+	-- draw the player and the lifted pot over it
+	love.graphics.draw(gTextures[self.entity.currentAnimation.texture], gFrames[self.entity.currentAnimation.texture][self.entity.currentAnimation:getCurrentFrame()],
+		math.floor(self.entity.x - self.entity.offsetX), math.floor(self.entity.y - self.entity.offsetY))
+	self.liftedObj:render(0, 0)
 end

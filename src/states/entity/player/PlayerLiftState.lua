@@ -7,7 +7,7 @@ function PlayerLiftState:init(player, dungeon)
 	self.dirX = 0
 	self.dirY = 0
 	if self.player.direction == "up" then
-		self.dirY = - 1
+		self.dirY = -1
 	elseif self.player.direction == "down" then
 		self.dirY = 1
 	elseif self.player.direction == "right" then
@@ -15,18 +15,6 @@ function PlayerLiftState:init(player, dungeon)
 	elseif self.player.direction == "left" then
 		self.dirX = -1
 	end
-	-- temporarily move forwards to check for collided objects
-	self.player.x = self.player.x + self.dirX * 16
-	self.player.y = self.player.y + self.dirY * 16
-	for k, obj in pairs(dungeon.currentRoom.objects) do
-		if obj.solid and self.player:collides(obj) then
-			self.liftedObj = obj
-			break
-		end
-	end
-	-- Move the player back to it's place
-	self.player.x = self.player.x - self.dirX * 16
-	self.player.y = self.player.y - self.dirY * 16
 
 	self.player:changeAnimation("lift-" .. self.player.direction)
 end
@@ -40,8 +28,25 @@ function PlayerLiftState:update(dt)
 
 	-- is the lifting animation has finished playing and there's a pot in front of us move to the carry state, else go back to idle
 	if self.player.currentAnimation.timesPlayed > 0 then
+		-- temporarily move forwards to check for collided objects
+		self.player.x = self.player.x + self.dirX * 16
+		self.player.y = self.player.y + self.dirY * 16
+		for k, obj in pairs(self.dungeon.currentRoom.objects) do
+			if obj.solid and self.player:collides(obj) then
+				self.liftedObj = obj
+				self.liftedObj.solid = false
+				table.remove(self.dungeon.currentRoom.objects, k)
+				break
+			end
+		end
+		-- Move the player back to it's place
+		self.player.x = self.player.x - self.dirX * 16
+		self.player.y = self.player.y - self.dirY * 16
+
 		if self.liftedObj then
-			self.player:changeState("carry", self.liftedObj)
+			self.player.stateMachine:change("carry", {
+				obj = self.liftedObj
+			})
 		else
 			self.player:changeState("idle")
 		end
