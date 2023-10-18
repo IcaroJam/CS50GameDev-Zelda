@@ -39,6 +39,14 @@ function Projectile:update(dt)
 	end
 
 	-- check is the pot hit a wall
+	if (
+		self.body.x < MAP_RENDER_OFFSET_X or
+		self.body.x + self.body.width > VIRTUAL_WIDTH - MAP_RENDER_OFFSET_X or
+		self.body.y < MAP_RENDER_OFFSET_Y or
+		self.body.y + self.body.height > VIRTUAL_HEIGHT - MAP_RENDER_OFFSET_Y
+	) then
+		table.remove(self.room.projectiles, indexOf(self.room.projectiles, self))
+	end
 end
 
 function Projectile:render()
