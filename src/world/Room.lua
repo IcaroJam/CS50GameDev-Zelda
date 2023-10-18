@@ -23,6 +23,9 @@ function Room:init(player)
 	self.objects = {}
 	self:generateObjects()
 
+	-- room projectiles
+	self.projectiles = {}
+
 	-- doorways that lead to other dungeon rooms
 	self.doorways = {}
 	table.insert(self.doorways, Doorway('top', false, self))
@@ -216,6 +219,10 @@ function Room:update(dt)
 			table.remove(self.objects, k)
 		end
 	end
+
+	for k, proj in pairs(self.projectiles) do
+		proj:update(dt)
+	end
 end
 
 function Room:render()
@@ -236,6 +243,10 @@ function Room:render()
 
 	for k, object in pairs(self.objects) do
 		object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+	end
+
+	for k, proj in pairs(self.projectiles) do
+		proj:render(self.adjacentOffsetX, self.adjacentOffsetY)
 	end
 
 	for k, entity in pairs(self.entities) do

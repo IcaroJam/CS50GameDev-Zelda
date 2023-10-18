@@ -69,3 +69,15 @@ function print_r ( t )
     end
     print()
 end
+
+--[[
+	Return the index of a given element in a given table.
+]]
+function indexOf(table, elem)
+	for i, temp in ipairs(table) do
+		if temp == elem then
+			return i
+		end
+	end
+	return nil
+end
